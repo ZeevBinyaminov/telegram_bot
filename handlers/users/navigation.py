@@ -8,6 +8,14 @@ from loader import dp
 
 
 # обработка команды
+@dp.message_handler(Command("start"))
+async def welcome(message: Message):
+    await message.answer(
+        text="Привет!\n"
+        "Я - бот-навигатор, помогаю найти необходимые ссылки и чаты.\n"
+        "Выбери, какой предмет тебя интересует:",
+        reply_markup=choice
+    )
 
 @dp.message_handler(Command("items"))  # /items
 async def show_items(message: Message):
@@ -17,13 +25,13 @@ async def show_items(message: Message):
 
 # обработка нажатия на кнопку
 
-@dp.callback_query_handler(text_contains="Calculus")
+@dp.callback_query_handler(text_contains="Матан")
 async def choose_calculus(call: CallbackQuery):
-    await call.answer(cache_time=10)
+    await call.answer(cache_time=1)
     callback_data = call.data
     logging.info(f"call = {callback_data}")
 
-    await call.message.answer("Ссылка на матан:", reply_markup=calculus_keyboard)
+    await call.message.edit_reply_markup(reply_markup=calculus_keyboard)
 
 
 @dp.callback_query_handler(text="back to start")
