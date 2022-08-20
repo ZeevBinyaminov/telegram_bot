@@ -26,4 +26,6 @@ async def choose_calculus(call: CallbackQuery):
     await call.message.answer("Ссылка на матан:", reply_markup=calculus_keyboard)
 
 
-
+@dp.callback_query_handler(text="back to start")
+async def back_to_start(call: CallbackQuery):
+    await call.message.edit_reply_markup(reply_markup=choice)
