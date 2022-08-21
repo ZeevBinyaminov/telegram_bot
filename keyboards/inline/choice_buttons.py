@@ -3,7 +3,7 @@ from keyboards.inline.callback_data import subject_choice_callback, social_media
 from db import subjects_dict
 
 # start menu
-main_menu = InlineKeyboardMarkup(row_width=1)
+main_menu = InlineKeyboardMarkup(row_width=2)
 social_media_button = InlineKeyboardButton(text="Социальные сети",
                                            callback_data="social media")
 subject_button = InlineKeyboardButton(text='Предметы',
@@ -28,8 +28,8 @@ social_media_menu.add(vk, telegram, instagram)
 social_media_menu.insert(back_button)
 
 # subjects
-subjects_menu = InlineKeyboardMarkup(row_width=2)
-for subject in sorted(subjects_dict):
+subjects_menu = InlineKeyboardMarkup(row_width=3)
+for subject in subjects_dict:
     choose_subject = InlineKeyboardButton(text=subject,
                                           callback_data=subject_choice_callback.new(
                                               subject_name=subject,

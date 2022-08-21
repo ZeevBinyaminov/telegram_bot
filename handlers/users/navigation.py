@@ -14,14 +14,14 @@ from state import Subject
 from db import subjects_dict, social_media_dict
 
 
-@dp.message_handler(commands=["start", "items"])
+@dp.message_handler(commands=["start", "menu"])
 async def welcome(message: Message):
     command = message.get_command()
     command_text = {
         '/start': "Привет!\n"
                   "Я - бот-навигатор, помогаю найти необходимые ссылки и чаты.\n"
                   "Что тебя интересует ?",
-        '/items': 'Что тебя интересует ?',
+        '/menu': 'Что тебя интересует ?',
 
     }
 
@@ -57,6 +57,11 @@ async def choose_social_media(call: CallbackQuery):
     await call.message.answer(text='Наши соцсети:', reply_markup=social_media_menu)
 
 
+@dp.message_handler(commands=['social_media'])
+async def get_social_media(message: Message):
+    await message.answer(text='Наши соцсети:', reply_markup=social_media_menu)
+
+
 @dp.callback_query_handler(text='subjects')
 async def choose_subjects(call: CallbackQuery):
     await call.answer(cache_time=2)
@@ -64,6 +69,9 @@ async def choose_subjects(call: CallbackQuery):
     logging.info(f"call = {callback_data}")
     await call.message.answer(text='Выбери предмет:', reply_markup=subjects_menu)
 
+@dp.message_handler(commands=['subjects'])
+async def get_subjects(message: Message):
+    await message.answer(text='Предметы: ', reply_markup=subjects_menu)
 
 @dp.callback_query_handler(text='back')
 async def back(call: CallbackQuery):
@@ -145,7 +153,6 @@ async def add_instagram_link(message: Message, state: FSMContext):
         data['zoom_link'] = message.text
 
     await add_subject_json(state)
-    print(subjects_dict)
     await state.finish()
 
     await message.answer(text=f"Предмет \"{data['subject_name']}\" успешно добавлен")
