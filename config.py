@@ -1,5 +1,4 @@
 import os
-# загрузка переменных окружения из специального файла
 from dotenv import load_dotenv
 load_dotenv()
 

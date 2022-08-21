@@ -1,6 +1,6 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from keyboards.inline.callback_data import subject_choice_callback, social_media_choice_callback
-from info import subjects_dict
+from db import subjects_dict
 
 # start menu
 main_menu = InlineKeyboardMarkup(row_width=1)

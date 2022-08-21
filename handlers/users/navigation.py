@@ -4,13 +4,11 @@ from aiogram.dispatcher.filters import Command
 from aiogram.types import Message, CallbackQuery
 
 from keyboards.inline.choice_buttons import main_menu, social_media_menu, subjects_menu
-from keyboards.inline.callback_data import subject_choice_callback, social_media_choice_callback
+from keyboards.inline.callback_data import subject_choice_callback
 from loader import dp
 
-from info import subjects_dict
+from db import subjects_dict
 
-
-# обработка команды
 @dp.message_handler(Command("start"))
 async def welcome(message: Message):
     await message.answer(
@@ -21,7 +19,7 @@ async def welcome(message: Message):
     )
 
 
-@dp.message_handler(Command("items"))  # /items
+@dp.message_handler(Command("items"))
 async def show_items(message: Message):
     await message.answer(text='Что тебя интересует ?', reply_markup=main_menu)
 
@@ -49,8 +47,6 @@ async def back(call: CallbackQuery):
     logging.info(f"call = {callback_data}")
     await call.message.answer(text='Что тебя интересует ?', reply_markup=main_menu)
 
-
-# выбор одного из предметов
 
 @dp.callback_query_handler(subject_choice_callback.filter())
 async def choose_subject(call: CallbackQuery, callback_data: dict):

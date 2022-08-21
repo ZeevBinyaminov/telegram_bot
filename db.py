@@ -1,3 +1,8 @@
+from json import load
+from aiogram import types
+
+# subjects_dict = load(open("subjects.json"))
+
 subjects_dict = {
     "Матан": {
         "Youtube": 'https://youtube.com',
@@ -5,9 +10,10 @@ subjects_dict = {
         "Чат во Вконтакте": '',
         "Ссылка на зум": '',
     },
-    "Linear_algebra": {
+    "Линал": {
         "Youtube": 'https://youtube.com',
         "Instagram": '',
         "Чат во Вконтакте": '',
+        "Ссылка на зум": '',
     },
 }
