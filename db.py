@@ -7,18 +7,15 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.dispatcher.filters import Command
 from loader import dp
 
-
 with open("users.json", "r") as users_file:
     users_dict = json.load(users_file)
-print(users_dict)
 
 with open("subjects.json", "r") as subjects_file:
     subjects_dict = json.load(subjects_file)
-print(subjects_dict)
 
 with open("social_media.json", "r") as social_media_file:
     social_media_dict = json.load(social_media_file)
-print(social_media_dict)
+
 
 
 class Subject(StatesGroup):
@@ -35,6 +32,3 @@ async def cancel(message: types.Message, state: FSMContext):
         return None
 
     await state.reset_state()
-
-
-

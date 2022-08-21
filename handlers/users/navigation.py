@@ -1,3 +1,4 @@
+import json
 import logging
 from config import ADMIN_ID
 
@@ -20,6 +21,25 @@ async def welcome(message: Message):
         '/items': 'Что тебя интересует ?',
 
     }
+
+    # ---- Добавление нового пользователя в словарь и учет кликов
+    with open("users.json", "r") as users_file:
+        users_dict = json.load(users_file)
+    print(users_dict)
+    user_id = str(message.from_user.id)
+    username = message.from_user.username
+
+    if user_id not in users_dict:
+        users_dict[user_id] = {
+            "username": username,
+            "visits": 0
+        }
+    users_dict[user_id]["visits"] += 1
+
+    with open("users.json", "w") as users_file:
+        json.dump(users_dict, users_file, indent=4, ensure_ascii=False)
+    # ----
+
     await message.answer(
         text=command_text[command],
         reply_markup=main_menu
