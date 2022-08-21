@@ -1,32 +1,40 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from keyboards.inline.callback_data import choice_callback
+from keyboards.inline.callback_data import subject_choice_callback, social_media_choice_callback, navigation_callback
+from info import subjects_dict
 
-subjects = {
-    "Матан": {
-        "Youtube": 'https://youtube.com',
-        "Instagram": '',
-        "Чат во Вконтакте": '',
-    },
-    "Linear_algebra": {
-        "Youtube": '',
-        "Instagram": '',
-        "Чат во Вконтакте": '',
-    },
-}
+# start menu
+main_menu = InlineKeyboardMarkup(row_width=2)
+social_media_button = InlineKeyboardButton(text="Социальные сети",
+                                           callback_data="social media")
+subject_button = InlineKeyboardButton(text='Предметы',
+                                      callback_data="subjects")
+main_menu.insert(social_media_button)
+main_menu.insert(subject_button)
 
+# back to previous step
+back_button = InlineKeyboardButton(text="Назад", callback_data="back")
 
-choice = InlineKeyboardMarkup(row_width=2)
-for subject in sorted(subjects):
+# social media
+
+social_media_menu = InlineKeyboardMarkup(row_width=3)
+vk = InlineKeyboardButton(text='Вконтакте',
+                          callback_data=social_media_choice_callback.new(social_media_name="Вконтакте"))
+telegram = InlineKeyboardButton(text='Telegram',
+                                callback_data=social_media_choice_callback.new(social_media_name="Telegram"))
+instagram = InlineKeyboardButton(text='Instagram',
+                                 callback_data=social_media_choice_callback.new(social_media_name="Instagram"))
+# social_media_menu.add(vk, telegram, instagram)
+social_media_menu.insert(vk)
+social_media_menu.insert(telegram)
+social_media_menu.insert(instagram)
+social_media_menu.insert(back_button)
+
+# subjects
+subjects_menu = InlineKeyboardMarkup(row_width=2)
+for subject in sorted(subjects_dict):
     choose_subject = InlineKeyboardButton(text=subject,
-                                          callback_data=choice_callback.new(
+                                          callback_data=subject_choice_callback.new(
                                               subject_name=subject,
                                           ))
-    choice.insert(choose_subject)
-
-restart_button = InlineKeyboardButton(text="В начало", callback_data="back to start")
-back_button = InlineKeyboardButton(text="Назад", callback_data="one turn back")
-
-
-calculus_keyboard = InlineKeyboardMarkup()
-calculus_keyboard.insert(InlineKeyboardButton(text='youtube', url='https://youtube.com'))
-calculus_keyboard.insert(restart_button)
+    subjects_menu.insert(choose_subject)
+subjects_menu.insert(back_button)
