@@ -19,13 +19,13 @@ back_button = InlineKeyboardButton(text="Назад", callback_data="back")
 social_media_menu = InlineKeyboardMarkup(row_width=3)
 vk = InlineKeyboardButton(text='Вконтакте',
                           callback_data=social_media_choice_callback.new(social_media_name="Вконтакте"),
-                          url='https://vk.com/optimum_iq')
+                          )
 telegram = InlineKeyboardButton(text='Telegram',
                                 callback_data=social_media_choice_callback.new(social_media_name="Telegram"),
-                                url='https://t.me/optimumclub')
+                                )
 instagram = InlineKeyboardButton(text='Instagram',
                                  callback_data=social_media_choice_callback.new(social_media_name="Instagram"),
-                                 url='https://instagram.com/optimum_iq?igshid=YmMyMTA2M2Y=')
+                                 )
 social_media_menu.add(vk, telegram, instagram)
 social_media_menu.insert(back_button)
 
