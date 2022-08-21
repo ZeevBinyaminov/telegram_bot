@@ -4,10 +4,10 @@ from aiogram.dispatcher.filters import Command
 from aiogram.types import Message, CallbackQuery
 
 from keyboards.inline.choice_buttons import main_menu, social_media_menu, subjects_menu
-from keyboards.inline.callback_data import subject_choice_callback, social_media_choice_callback, navigation_callback
+from keyboards.inline.callback_data import subject_choice_callback, social_media_choice_callback
 from loader import dp
 
-from info import subjects_dict, social_media_dict
+from info import subjects_dict
 
 
 # обработка команды
@@ -28,7 +28,7 @@ async def show_items(message: Message):
 
 @dp.callback_query_handler(text='social media')
 async def choose_social_media(call: CallbackQuery):
-    await call.answer(cache_time=3)
+    await call.answer(cache_time=2)
     callback_data = call.data
     logging.info(f"call = {callback_data}")
     await call.message.answer(text='Наши соцсети:', reply_markup=social_media_menu)
@@ -36,15 +36,15 @@ async def choose_social_media(call: CallbackQuery):
 
 @dp.callback_query_handler(text='subjects')
 async def choose_subjects(call: CallbackQuery):
-    await call.answer(cache_time=1)
+    await call.answer(cache_time=2)
     callback_data = call.data
     logging.info(f"call = {callback_data}")
     await call.message.answer(text='Выбери предмет:', reply_markup=subjects_menu)
 
 
 @dp.callback_query_handler(text='back')
-async def choose_subjects(call: CallbackQuery):
-    await call.answer(cache_time=1)
+async def back(call: CallbackQuery):
+    await call.answer(cache_time=2)
     callback_data = call.data
     logging.info(f"call = {callback_data}")
     await call.message.answer(text='Что тебя интересует ?', reply_markup=main_menu)
@@ -60,9 +60,3 @@ async def choose_subject(call: CallbackQuery, callback_data: dict):
     await call.message.answer(text=subjects_dict[subject])
 
 
-@dp.callback_query_handler(social_media_choice_callback.filter())
-async def choose_subject(call: CallbackQuery, callback_data: dict):
-    await call.answer(cache_time=2)
-    logging.info(f"call = {callback_data}")
-    social_media = callback_data.get('social_media_name')
-    await call.message.answer(text=social_media_dict[social_media])

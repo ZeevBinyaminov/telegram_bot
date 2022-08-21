@@ -1,9 +1,9 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from keyboards.inline.callback_data import subject_choice_callback, social_media_choice_callback, navigation_callback
+from keyboards.inline.callback_data import subject_choice_callback, social_media_choice_callback
 from info import subjects_dict
 
 # start menu
-main_menu = InlineKeyboardMarkup(row_width=2)
+main_menu = InlineKeyboardMarkup(row_width=1)
 social_media_button = InlineKeyboardButton(text="Социальные сети",
                                            callback_data="social media")
 subject_button = InlineKeyboardButton(text='Предметы',
@@ -18,11 +18,14 @@ back_button = InlineKeyboardButton(text="Назад", callback_data="back")
 
 social_media_menu = InlineKeyboardMarkup(row_width=3)
 vk = InlineKeyboardButton(text='Вконтакте',
-                          callback_data=social_media_choice_callback.new(social_media_name="Вконтакте"))
+                          callback_data=social_media_choice_callback.new(social_media_name="Вконтакте"),
+                          url='https://vk.com/optimum_iq')
 telegram = InlineKeyboardButton(text='Telegram',
-                                callback_data=social_media_choice_callback.new(social_media_name="Telegram"))
+                                callback_data=social_media_choice_callback.new(social_media_name="Telegram"),
+                                url='https://t.me/optimumclub')
 instagram = InlineKeyboardButton(text='Instagram',
-                                 callback_data=social_media_choice_callback.new(social_media_name="Instagram"))
+                                 callback_data=social_media_choice_callback.new(social_media_name="Instagram"),
+                                 url='https://instagram.com/optimum_iq?igshid=YmMyMTA2M2Y=')
 social_media_menu.add(vk, telegram, instagram)
 social_media_menu.insert(back_button)
 
