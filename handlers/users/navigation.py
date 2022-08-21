@@ -1,12 +1,11 @@
 import logging
-
-from aiogram.dispatcher.filters import Command
-from aiogram.types import Message, CallbackQuery
-
 from config import ADMIN_ID
+
+from aiogram.types import Message, CallbackQuery
+from loader import dp
+
 from keyboards.inline.choice_buttons import main_menu, social_media_menu, subjects_menu
 from keyboards.inline.callback_data import subject_choice_callback, social_media_choice_callback
-from loader import dp
 
 from db import subjects_dict, social_media_dict
 
@@ -16,8 +15,8 @@ async def welcome(message: Message):
     command = message.get_command()
     command_text = {
         '/start': "Привет!\n"
-             "Я - бот-навигатор, помогаю найти необходимые ссылки и чаты.\n"
-             "Что тебя интересует ?",
+                  "Я - бот-навигатор, помогаю найти необходимые ссылки и чаты.\n"
+                  "Что тебя интересует ?",
         '/items': 'Что тебя интересует ?',
 
     }
@@ -25,7 +24,6 @@ async def welcome(message: Message):
         text=command_text[command],
         reply_markup=main_menu
     )
-
 
 
 @dp.callback_query_handler(text='social media')
@@ -72,6 +70,6 @@ async def choose_social_media(call: CallbackQuery, callback_data: dict):
     )
 
 
-@dp.message_handler(Command("add_subject"), user_id=ADMIN_ID)
+@dp.message_handler(commands=["add_subject"], user_id=ADMIN_ID)
 async def add_subject(message: Message):
     await message.answer("Введи название предмета")

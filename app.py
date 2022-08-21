@@ -5,7 +5,7 @@ from loader import bot
 
 async def on_shutdown(dp):
     await bot.send_message(ADMIN_ID, "Бот выключен")
-    bot.close()
+    await bot.close()
 
 
 async def on_startup(dp):

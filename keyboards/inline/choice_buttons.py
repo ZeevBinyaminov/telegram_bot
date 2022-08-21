@@ -18,14 +18,12 @@ back_button = InlineKeyboardButton(text="Назад", callback_data="back")
 
 social_media_menu = InlineKeyboardMarkup(row_width=3)
 vk = InlineKeyboardButton(text='Вконтакте',
-                          callback_data=social_media_choice_callback.new(social_media_name="Вконтакте"),
-                          )
+                          callback_data=social_media_choice_callback.new(social_media_name="Вконтакте"))
 telegram = InlineKeyboardButton(text='Telegram',
-                                callback_data=social_media_choice_callback.new(social_media_name="Telegram"),
-                                )
+                                callback_data=social_media_choice_callback.new(social_media_name="Telegram"))
 instagram = InlineKeyboardButton(text='Instagram',
-                                 callback_data=social_media_choice_callback.new(social_media_name="Instagram"),
-                                 )
+                                 callback_data=social_media_choice_callback.new(social_media_name="Instagram"))
+
 social_media_menu.add(vk, telegram, instagram)
 social_media_menu.insert(back_button)
 

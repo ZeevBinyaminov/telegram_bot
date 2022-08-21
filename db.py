@@ -1,45 +1,24 @@
-from json import load
+import json
 from aiogram import types
 
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.dispatcher.filters import Command
-
 from loader import dp
 
-# subjects_dict = load(open("subjects.json"))
 
-subjects_dict = {
-    "Матан": {
-        "Youtube": 'https://youtube.com',
-        "Instagram": '',
-        "Чат во Вконтакте": '',
-        "Ссылка на зум": '',
-    },
-    "Линал": {
-        "Youtube": 'https://youtube.com',
-        "Instagram": '',
-        "Чат во Вконтакте": '',
-        "Ссылка на зум": '',
-    },
-}
+with open("users.json", "r") as users_file:
+    users_dict = json.load(users_file)
+print(users_dict)
 
-social_media_dict = {
-    'Вконтакте': {
-        "clicks": 0,
-        "url": 'https://vk.com/optimum_iq',
-    },
+with open("subjects.json", "r") as subjects_file:
+    subjects_dict = json.load(subjects_file)
+print(subjects_dict)
 
-    'Telegram': {
-        "clicks": 0,
-        "url": 'https://t.me/optimumclub',
-    },
-    'Instagram': {
-        "clicks": 0,
-        "url": 'https://t.me/optimumclub',
-    },
-}
+with open("social_media.json", "r") as social_media_file:
+    social_media_dict = json.load(social_media_file)
+print(social_media_dict)
 
 
 class Subject(StatesGroup):
