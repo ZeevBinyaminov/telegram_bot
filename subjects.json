@@ -1,14 +1,14 @@
 {
     "Линал": {
-      "youtube_link": "https://youtube.com",
-      "instagram_link": "",
-      "chat_link": "",
-      "zoom_link": ""
-  },
+        "youtube_link": "https://youtube.com",
+        "instagram_link": "",
+        "chat_link": "",
+        "zoom_link": ""
+    },
     "Матан": {
-      "youtube_link": "https://youtube.com",
-      "instagram_link": "",
-      "chat_link": "",
-      "zoom_link": ""
-  }
+        "youtube_link": "https://youtube.com",
+        "instagram_link": "",
+        "chat_link": "",
+        "zoom_link": ""
+    }
 }

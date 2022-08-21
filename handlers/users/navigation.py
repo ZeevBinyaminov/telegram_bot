@@ -111,8 +111,6 @@ async def add_subject_name(message: Message, state: FSMContext):
         await Subject.next()
         await message.answer("Теперь введи ссылку на youtube-плейлист")
 
-        print(message.text)
-
 
 @dp.message_handler(user_id=ADMIN_ID, state=Subject.youtube_link)
 async def add_youtube_link(message: Message, state: FSMContext):
@@ -121,8 +119,6 @@ async def add_youtube_link(message: Message, state: FSMContext):
 
     await Subject.next()
     await message.answer("Теперь введи ссылку на instagram-плейлист")
-
-    print(message.text)
 
 
 @dp.message_handler(user_id=ADMIN_ID, state=Subject.instagram_link)
@@ -133,8 +129,6 @@ async def add_instagram_link(message: Message, state: FSMContext):
     await Subject.next()
     await message.answer("Теперь введи ссылку на чат")
 
-    print(message.text)
-
 
 @dp.message_handler(user_id=ADMIN_ID, state=Subject.chat_link)
 async def add_instagram_link(message: Message, state: FSMContext):
@@ -144,16 +138,23 @@ async def add_instagram_link(message: Message, state: FSMContext):
     await Subject.next()
     await message.answer("И, наконец, введи ссылку на zoom")
 
-    print(message.text)
-
 
 @dp.message_handler(user_id=ADMIN_ID, state=Subject.zoom_link)
 async def add_instagram_link(message: Message, state: FSMContext):
     async with state.proxy() as data:
         data['zoom_link'] = message.text
+
+    await add_subject_json(state)
+    print(subjects_dict)
     await state.finish()
 
     await message.answer(text=f"Предмет \"{data['subject_name']}\" успешно добавлен")
-    print(message.text)
-    print(data)
 
+
+async def add_subject_json(state: FSMContext):
+    async with state.proxy() as data:
+        keys = list(data.keys())
+        subjects_dict[data[keys[0]]] = {keys[i]: data[keys[i]] for i in range(1, 5)}
+
+    with open("subjects.json", "w") as subjects_file:
+        json.dump(subjects_dict, subjects_file, indent=4, ensure_ascii=False)
