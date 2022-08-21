@@ -8,6 +8,9 @@ from loader import dp
 from keyboards.inline.choice_buttons import main_menu, social_media_menu, subjects_menu
 from keyboards.inline.callback_data import subject_choice_callback, social_media_choice_callback
 
+from aiogram.dispatcher import FSMContext
+from state import Subject
+
 from db import subjects_dict, social_media_dict
 
 
@@ -90,6 +93,67 @@ async def choose_social_media(call: CallbackQuery, callback_data: dict):
     )
 
 
-@dp.message_handler(commands=["add_subject"], user_id=ADMIN_ID)
+@dp.message_handler(commands=["add_subject"], user_id=ADMIN_ID, state=None)
 async def add_subject(message: Message):
+    await Subject.subject_name.set()
     await message.answer("Введи название предмета")
+
+
+@dp.message_handler(user_id=ADMIN_ID, state=Subject.subject_name)
+async def add_subject_name(message: Message, state: FSMContext):
+    if message.text in subjects_dict:
+        await message.answer(text="Такой предмет уже есть!")
+        await state.reset_state()
+    else:
+        async with state.proxy() as data:
+            data['subject_name'] = message.text
+
+        await Subject.next()
+        await message.answer("Теперь введи ссылку на youtube-плейлист")
+
+        print(message.text)
+
+
+@dp.message_handler(user_id=ADMIN_ID, state=Subject.youtube_link)
+async def add_youtube_link(message: Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['youtube_link'] = message.text
+
+    await Subject.next()
+    await message.answer("Теперь введи ссылку на instagram-плейлист")
+
+    print(message.text)
+
+
+@dp.message_handler(user_id=ADMIN_ID, state=Subject.instagram_link)
+async def add_instagram_link(message: Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['instagram_link'] = message.text
+
+    await Subject.next()
+    await message.answer("Теперь введи ссылку на чат")
+
+    print(message.text)
+
+
+@dp.message_handler(user_id=ADMIN_ID, state=Subject.chat_link)
+async def add_instagram_link(message: Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['chat_link'] = message.text
+
+    await Subject.next()
+    await message.answer("И, наконец, введи ссылку на zoom")
+
+    print(message.text)
+
+
+@dp.message_handler(user_id=ADMIN_ID, state=Subject.zoom_link)
+async def add_instagram_link(message: Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['zoom_link'] = message.text
+    await state.finish()
+
+    await message.answer(text=f"Предмет \"{data['subject_name']}\" успешно добавлен")
+    print(message.text)
+    print(data)
+

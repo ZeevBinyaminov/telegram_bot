@@ -1,14 +1,14 @@
 {
     "Линал": {
-      "Youtube": "https://youtube.com",
-      "Instagram": "",
-      "Чат во Вконтакте": "",
-      "Ссылка на зум": ""
+      "youtube_link": "https://youtube.com",
+      "instagram_link": "",
+      "chat_link": "",
+      "zoom_link": ""
   },
     "Матан": {
-      "Youtube": "https://youtube.com",
-      "Instagram": "",
-      "Чат во Вконтакте": "",
-      "Ссылка на зум": ""
+      "youtube_link": "https://youtube.com",
+      "instagram_link": "",
+      "chat_link": "",
+      "zoom_link": ""
   }
 }

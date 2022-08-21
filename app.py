@@ -1,10 +1,10 @@
 from aiogram import executor
 from config import ADMIN_ID
-from loader import bot
-
+from loader import bot, storage
 
 async def on_shutdown(dp):
     await bot.send_message(ADMIN_ID, "Бот выключен")
+    await storage.close()
     await bot.close()
 
 
