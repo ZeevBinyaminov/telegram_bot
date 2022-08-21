@@ -23,10 +23,7 @@ telegram = InlineKeyboardButton(text='Telegram',
                                 callback_data=social_media_choice_callback.new(social_media_name="Telegram"))
 instagram = InlineKeyboardButton(text='Instagram',
                                  callback_data=social_media_choice_callback.new(social_media_name="Instagram"))
-# social_media_menu.add(vk, telegram, instagram)
-social_media_menu.insert(vk)
-social_media_menu.insert(telegram)
-social_media_menu.insert(instagram)
+social_media_menu.add(vk, telegram, instagram)
 social_media_menu.insert(back_button)
 
 # subjects

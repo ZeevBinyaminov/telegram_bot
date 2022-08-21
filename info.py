@@ -13,7 +13,7 @@ subjects_dict = {
 
 
 social_media_dict = {
-    'vk': '',
-    'telegram': '',
-    'instagram': ''
+    'Вконтакте': '',
+    'Telegram': '',
+    'Instagram': ''
 }
