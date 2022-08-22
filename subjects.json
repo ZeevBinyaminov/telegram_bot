@@ -1,50 +1,14 @@
 {
     "Линал": {
-        "youtube_link": "https://youtube.com",
-        "instagram_link": "",
-        "chat_link": "",
-        "zoom_link": ""
+        "youtube_link": "тут должна быть ссылка",
+        "instagram_link": "тут должна быть ссылка",
+        "chat_link": "тут должна быть ссылка",
+        "zoom_link": "тут должна быть ссылка"
     },
     "Матан": {
-        "youtube_link": "https://youtube.com",
+        "youtube_link": "",
         "instagram_link": "",
         "chat_link": "",
         "zoom_link": ""
-    },
-    "Тервер": {
-        "youtube_link": "youtube.com",
-        "instagram_link": "inst.com",
-        "chat_link": "chat",
-        "zoom_link": "zoom"
-    },
-    "Питон": {
-        "youtube_link": "питон",
-        "instagram_link": "питон",
-        "chat_link": "питон",
-        "zoom_link": "питон"
-    },
-    "Микра": {
-        "youtube_link": "ла",
-        "instagram_link": "ао",
-        "chat_link": "ал",
-        "zoom_link": "ал"
-    },
-    "check": {
-        "youtube_link": "lsls",
-        "instagram_link": "sksk",
-        "chat_link": "sksk",
-        "zoom_link": "sks"
-    },
-    "11111": {
-        "youtube_link": "lsls",
-        "instagram_link": "slsls",
-        "chat_link": "lsls",
-        "zoom_link": "ksk"
-    },
-    "22222": {
-        "youtube_link": "ss",
-        "instagram_link": "s",
-        "chat_link": "s",
-        "zoom_link": "s"
     }
 }
