@@ -2,7 +2,6 @@ import json
 import logging
 from datetime import datetime
 
-import schedule
 from config import ADMIN_ID
 
 from loader import dp, bot
@@ -53,7 +52,7 @@ async def welcome(message: Message):
 
 @dp.callback_query_handler(text='social media')
 async def choose_social_media(call: CallbackQuery):
-    await call.answer(cache_time=2)
+    await call.answer(cache_time=1)
     callback_data = call.data
     logging.info(f"call = {callback_data}")
     await call.message.answer(text='Наши соцсети:', reply_markup=social_media_menu)
@@ -66,7 +65,7 @@ async def get_social_media(message: Message):
 
 @dp.callback_query_handler(text='subjects')
 async def choose_subjects(call: CallbackQuery):
-    await call.answer(cache_time=2)
+    await call.answer(cache_time=1)
     callback_data = call.data
     logging.info(f"call = {callback_data}")
     await call.message.answer(text='Выбери предмет:', reply_markup=subjects_menu)
@@ -79,15 +78,20 @@ async def get_subjects(message: Message):
 
 @dp.callback_query_handler(text="events")
 async def choose_events(call: CallbackQuery):
-    await call.answer(cache_time=2)
+    await call.answer(cache_time=1)
     callback_data = call.data
     logging.info(f"call = {callback_data}")
     await call.message.answer(text='Список ближайщих событий', reply_markup=events_menu)
 
 
+@dp.message_handler(commands=['events'])
+async def get_events(message: Message):
+    await message.answer(text='Список ближайщих событий', reply_markup=events_menu)
+
+
 @dp.callback_query_handler(text='back')
 async def back(call: CallbackQuery):
-    await call.answer(cache_time=2)
+    await call.answer(cache_time=1)
     callback_data = call.data
     logging.info(f"call = {callback_data}")
     await call.message.answer(text='Что тебя интересует ?', reply_markup=main_menu)
@@ -95,7 +99,7 @@ async def back(call: CallbackQuery):
 
 @dp.callback_query_handler(subject_choice_callback.filter())
 async def choose_subject(call: CallbackQuery, callback_data: dict):
-    await call.answer(cache_time=2)
+    await call.answer(cache_time=1)
     logging.info(f"call = {callback_data}")
     subject = callback_data.get('subject_name')
     await call.message.answer(text=subjects_dict[subject])
@@ -103,7 +107,7 @@ async def choose_subject(call: CallbackQuery, callback_data: dict):
 
 @dp.callback_query_handler(social_media_choice_callback.filter())
 async def choose_social_media(call: CallbackQuery, callback_data: dict):
-    await call.answer(cache_time=2)
+    await call.answer(cache_time=1)
     logging.info(f"call = {callback_data}")
     social_media = callback_data.get('social_media_name')
     social_media_dict[social_media]["clicks"] += 1
@@ -234,7 +238,11 @@ async def add_event_time(message: Message, state: FSMContext):
 async def add_event_json(state: FSMContext):
     async with state.proxy() as data:
         keys = list(data.keys())
-        events_dict[data[keys[2]]] = {keys[i]: data[keys[i]] for i in (0, 1, 3)}
+        date = data[keys[2]]
+        time = data[keys[3]]
+        if date not in events_dict:
+            events_dict[date] = {}
+        events_dict[date][time] = {keys[i]: data[keys[i]] for i in (0, 1)}
 
     with open("events.json", "w") as events_file:
         json.dump(events_dict, events_file, indent=4, ensure_ascii=False)
@@ -248,4 +256,3 @@ async def notifier():
                 await bot.send_message(chat_id=ADMIN_ID,
                                        text=events_dict.get(date).get('event_text'))
                 del events_dict[date]
-
