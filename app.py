@@ -1,7 +1,7 @@
 from aiogram import executor
 from config import ADMIN_ID
 from loader import bot, storage, loop
-from handlers.users.handlers import notifier
+
 
 async def on_shutdown(dp):
     await bot.send_message(ADMIN_ID, "Бот выключен")
@@ -21,4 +21,3 @@ if __name__ == '__main__':
         on_shutdown=on_shutdown,
         loop=loop
     )
-

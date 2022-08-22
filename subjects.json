@@ -10,5 +10,23 @@
         "instagram_link": "",
         "chat_link": "",
         "zoom_link": ""
+    },
+    "Тервер": {
+        "youtube_link": "youtube.com",
+        "instagram_link": "inst.com",
+        "chat_link": "chat",
+        "zoom_link": "zoom"
+    },
+    "Питон": {
+        "youtube_link": "питон",
+        "instagram_link": "питон",
+        "chat_link": "питон",
+        "zoom_link": "питон"
+    },
+    "chill": {
+        "youtube_link": "chill",
+        "instagram_link": "cj",
+        "chat_link": "jd",
+        "zoom_link": "/subjects"
     }
 }

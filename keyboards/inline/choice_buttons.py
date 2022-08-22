@@ -33,26 +33,50 @@ social_media_menu.insert(back_button)
 
 # subjects
 subjects_menu = InlineKeyboardMarkup(row_width=3)
-for subject in subjects_dict:
-    choose_subject = InlineKeyboardButton(text=subject,
-                                          callback_data=subject_choice_callback.new(
-                                              subject_name=subject,
-                                          ))
-    subjects_menu.insert(choose_subject)
-subjects_menu.insert(back_button)
+
+
+#
+# for subject in subjects_dict:
+#     choose_subject = InlineKeyboardButton(text=subject,
+#                                           callback_data=subject_choice_callback.new(
+#                                               subject_name=subject,
+#                                           ))
+#     subjects_menu.insert(choose_subject)
+# subjects_menu.insert(back_button)
+def update_subjects_menu():
+    global subjects_menu, subjects_dict
+    subjects_menu = InlineKeyboardMarkup(row_width=3)
+    for subject in subjects_dict:
+        choose_subject = InlineKeyboardButton(text=subject,
+                                              callback_data=subject_choice_callback.new(
+                                                  subject_name=subject,
+                                              ))
+        subjects_menu.insert(choose_subject)
+    subjects_menu.insert(back_button)
+
+
+update_subjects_menu()
 
 # events
 events_menu = InlineKeyboardMarkup(row_width=1)
-sorted_dates = sorted(events_dict, key=lambda date: datetime.strptime(date, '%d.%m.%Y'))
-for event_date in sorted_dates:
-    sorted_time = sorted(events_dict[event_date], key=lambda date: datetime.strptime(date, '%H:%M'))
-    for event_time in sorted_time:
-        choose_event = InlineKeyboardButton(
-            text=f"{events_dict[event_date][event_time]['event_name']}: {event_date} - {event_time}",
-            callback_data=event_choice_callback.new(
-                event_name=events_dict[event_date][event_time]['event_name'],
-            )
-        )
-        events_menu.insert(choose_event)
-events_menu.insert(back_button)
 
+
+def update_events_menu():
+    from db import events_dict
+    global events_menu
+    events_menu = InlineKeyboardMarkup(row_width=1)
+    sorted_dates = sorted(events_dict, key=lambda date: datetime.strptime(date, '%d.%m.%Y'))
+    for event_date in sorted_dates:
+        sorted_time = sorted(events_dict[event_date], key=lambda date: datetime.strptime(date, '%H:%M'))
+        for event_time in sorted_time:
+            choose_event = InlineKeyboardButton(
+                text=f"{events_dict[event_date][event_time]['event_name']}: {event_date} - {event_time}",
+                callback_data=event_choice_callback.new(
+                    event_name=events_dict[event_date][event_time]['event_name'],
+                )
+            )
+            events_menu.insert(choose_event)
+    events_menu.insert(back_button)
+
+
+update_events_menu()

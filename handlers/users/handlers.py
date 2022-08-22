@@ -7,8 +7,10 @@ from config import ADMIN_ID
 
 from loader import dp, bot
 from aiogram.types import Message, CallbackQuery
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-from keyboards.inline.choice_buttons import main_menu, social_media_menu, subjects_menu, events_menu
+from keyboards.inline.choice_buttons import main_menu, social_media_menu, subjects_menu, events_menu, \
+    update_events_menu, update_subjects_menu, back_button
 from keyboards.inline.callback_data import subject_choice_callback, social_media_choice_callback, event_choice_callback
 
 from aiogram.dispatcher import FSMContext
@@ -188,6 +190,7 @@ async def add_subject_json(state: FSMContext):
 
     with open("subjects.json", "w") as subjects_file:
         json.dump(subjects_dict, subjects_file, indent=4, ensure_ascii=False)
+    update_subjects_menu()
 
 
 # рассылка с выбором даты и времени
@@ -253,6 +256,22 @@ async def add_event_json(state: FSMContext):
 
     with open("events.json", "w") as events_file:
         json.dump(events_dict, events_file, indent=4, ensure_ascii=False)
+
+    # update menu function global events_menu - keep
+    global events_menu
+    events_menu = InlineKeyboardMarkup(row_width=1)
+    sorted_dates = sorted(events_dict, key=lambda date: datetime.strptime(date, '%d.%m.%Y'))
+    for event_date in sorted_dates:
+        sorted_time = sorted(events_dict[event_date], key=lambda date: datetime.strptime(date, '%H:%M'))
+        for event_time in sorted_time:
+            choose_event = InlineKeyboardButton(
+                text=f"{events_dict[event_date][event_time]['event_name']}: {event_date} - {event_time}",
+                callback_data=event_choice_callback.new(
+                    event_name=events_dict[event_date][event_time]['event_name'],
+                )
+            )
+            events_menu.insert(choose_event)
+    events_menu.insert(back_button)
 
 
 async def notifier():
