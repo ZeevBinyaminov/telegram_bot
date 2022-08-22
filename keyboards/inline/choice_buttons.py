@@ -31,6 +31,7 @@ instagram = InlineKeyboardButton(text='Instagram',
 social_media_menu.add(vk, telegram, instagram)
 social_media_menu.insert(back_button)
 
+
 # subjects
 
 def make_subjects_menu():
@@ -46,7 +47,6 @@ def make_subjects_menu():
 
 
 subjects_menu = make_subjects_menu()
-
 
 
 # events
@@ -69,5 +69,3 @@ def make_events_menu():
 
 
 events_menu = make_events_menu()
-
-
