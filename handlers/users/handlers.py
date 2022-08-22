@@ -1,18 +1,18 @@
 import json
 import logging
+# import datetime
 from config import ADMIN_ID
 
-from aiogram.types import Message, CallbackQuery
-
 from loader import dp
+from aiogram.types import Message, CallbackQuery
 
 from keyboards.inline.choice_buttons import main_menu, social_media_menu, subjects_menu
 from keyboards.inline.callback_data import subject_choice_callback, social_media_choice_callback
 
 from aiogram.dispatcher import FSMContext
-from state import Subject
+from state import Subject, Event
 
-from db import subjects_dict, social_media_dict
+from db import subjects_dict, social_media_dict, events_dict
 
 
 @dp.message_handler(commands=["start", "menu"])
@@ -69,9 +69,11 @@ async def choose_subjects(call: CallbackQuery):
     logging.info(f"call = {callback_data}")
     await call.message.answer(text='Выбери предмет:', reply_markup=subjects_menu)
 
+
 @dp.message_handler(commands=['subjects'])
 async def get_subjects(message: Message):
     await message.answer(text='Предметы: ', reply_markup=subjects_menu)
+
 
 @dp.callback_query_handler(text='back')
 async def back(call: CallbackQuery):
@@ -99,8 +101,6 @@ async def choose_social_media(call: CallbackQuery, callback_data: dict):
         text=f"Ссылка на {social_media}: \n"
              f"{social_media_dict[social_media]['url']}"
     )
-
-
 
 
 @dp.message_handler(commands=["add_subject"], user_id=ADMIN_ID, state=None)
@@ -170,3 +170,63 @@ async def add_subject_json(state: FSMContext):
 
 
 # рассылка с выбором даты и времени
+@dp.message_handler(user_id=ADMIN_ID, commands=['add_event'], state=None)
+async def set_event(message: Message):
+    await Event.event_name.set()
+    await message.answer("Введи название события")
+
+
+@dp.message_handler(user_id=ADMIN_ID, state=Event.event_name)
+async def add_event_name(message: Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['event_name'] = message.text
+
+    await Event.next()
+    await message.answer("Теперь введи текст рассылки")
+
+
+@dp.message_handler(user_id=ADMIN_ID, state=Event.event_text)
+async def add_event_text(message: Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['event_text'] = message.text
+
+    await Event.next()
+    await message.answer(
+        "Теперь введи дату события. Формат: \"dd.mm.yy\""
+    )
+
+
+@dp.message_handler(user_id=ADMIN_ID, state=Event.event_date)
+async def add_event_date(message: Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['event_date'] = message.text
+
+    await Event.next()
+    await message.answer(
+        "И последнее - введи время начала события. Формат: \"hh:mm\""
+    )
+
+
+@dp.message_handler(user_id=ADMIN_ID, state=Event.event_time)
+async def add_event_time(message: Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['event_time'] = message.text
+
+    await add_event_json(state)
+    await state.finish()
+    await message.answer(
+        f"Событие \"{data['event_name']}\" с текстом:\n \"{data['event_text']}\"\n"
+        f"добавлено и будет разослано {data['event_date']} "
+        f"в {data['event_time']}"
+    )
+
+
+async def add_event_json(state: FSMContext):
+    async with state.proxy() as data:
+        keys = list(data.keys())
+        # dt = datetime.datetime.strptime(data[keys[2]] + ' ' + data[keys[3]], "%d.%m.%y %H:%M")
+        # events_dict[dt.isocalendar()] = {keys[i]: data[keys[i]] for i in (0, 1)}
+        events_dict[data[keys[2]]] = {keys[i]: data[keys[i]] for i in (0, 1, 3)}
+
+    with open("events.json", "w") as events_file:
+        json.dump(events_dict, events_file, indent=4, ensure_ascii=False)

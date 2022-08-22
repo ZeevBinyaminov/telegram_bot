@@ -8,3 +8,6 @@ with open("subjects.json", "r") as subjects_file:
 
 with open("social_media.json", "r") as social_media_file:
     social_media_dict = json.load(social_media_file)
+
+with open("events.json", "r") as events_file:
+    events_dict = json.load(events_file)

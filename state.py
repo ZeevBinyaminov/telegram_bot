@@ -7,3 +7,10 @@ class Subject(StatesGroup):
     instagram_link = State()
     chat_link = State()
     zoom_link = State()
+
+
+class Event(StatesGroup):
+    event_name = State()
+    event_text = State()
+    event_date = State()
+    event_time = State()
