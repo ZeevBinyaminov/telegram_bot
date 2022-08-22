@@ -41,7 +41,6 @@ for subject in subjects_dict:
     subjects_menu.insert(choose_subject)
 subjects_menu.insert(back_button)
 
-
 # events
 events_menu = InlineKeyboardMarkup(row_width=1)
 sorted_dates = sorted(events_dict, key=lambda date: datetime.strptime(date, '%d.%m.%Y'))
@@ -51,8 +50,9 @@ for event_date in sorted_dates:
         choose_event = InlineKeyboardButton(
             text=f"{events_dict[event_date][event_time]['event_name']}: {event_date} - {event_time}",
             callback_data=event_choice_callback.new(
-                    event_name=events_dict[event_date][event_time]['event_name'],
-                )
+                event_name=events_dict[event_date][event_time]['event_name'],
+            )
         )
         events_menu.insert(choose_event)
 events_menu.insert(back_button)
+

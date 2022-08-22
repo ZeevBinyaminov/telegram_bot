@@ -83,14 +83,17 @@ async def choose_events(call: CallbackQuery):
     callback_data = call.data
     logging.info(f"call = {callback_data}")
     if events_dict:
-        await call.message.answer(text='Список ближайщих событий', reply_markup=events_menu)
+        await call.message.answer(text='Список ближайших событий', reply_markup=events_menu)
     else:
-        await call.message.answer(text="На ближайщее вреня нет событий")
+        await call.message.answer(text="На ближайшее вреня нет событий")
 
 
 @dp.message_handler(commands=['events'])
 async def get_events(message: Message):
-    await message.answer(text='Список ближайщих событий', reply_markup=events_menu)
+    if events_dict:
+        await message.answer(text='Список ближайших событий', reply_markup=events_menu)
+    else:
+        await message.answer(text="На ближайшее вреня нет событий")
 
 
 @dp.callback_query_handler(text='back')
