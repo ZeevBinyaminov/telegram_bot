@@ -3,6 +3,7 @@ import logging
 from config import ADMIN_ID
 
 from aiogram.types import Message, CallbackQuery
+
 from loader import dp
 
 from keyboards.inline.choice_buttons import main_menu, social_media_menu, subjects_menu
@@ -28,7 +29,6 @@ async def welcome(message: Message):
     # ---- Добавление нового пользователя в словарь и учет кликов
     with open("users.json", "r") as users_file:
         users_dict = json.load(users_file)
-    print(users_dict)
     user_id = str(message.from_user.id)
     username = message.from_user.username
 
@@ -101,6 +101,8 @@ async def choose_social_media(call: CallbackQuery, callback_data: dict):
     )
 
 
+
+
 @dp.message_handler(commands=["add_subject"], user_id=ADMIN_ID, state=None)
 async def add_subject(message: Message):
     await Subject.subject_name.set()
@@ -148,7 +150,7 @@ async def add_instagram_link(message: Message, state: FSMContext):
 
 
 @dp.message_handler(user_id=ADMIN_ID, state=Subject.zoom_link)
-async def add_instagram_link(message: Message, state: FSMContext):
+async def add_zoom_link(message: Message, state: FSMContext):
     async with state.proxy() as data:
         data['zoom_link'] = message.text
 
@@ -165,3 +167,6 @@ async def add_subject_json(state: FSMContext):
 
     with open("subjects.json", "w") as subjects_file:
         json.dump(subjects_dict, subjects_file, indent=4, ensure_ascii=False)
+
+
+# рассылка с выбором даты и времени

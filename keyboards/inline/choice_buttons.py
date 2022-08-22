@@ -36,3 +36,5 @@ for subject in subjects_dict:
                                           ))
     subjects_menu.insert(choose_subject)
 subjects_menu.insert(back_button)
+
+

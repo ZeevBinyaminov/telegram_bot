@@ -9,7 +9,7 @@ async def on_shutdown(dp):
 
 
 async def on_startup(dp):
-    await bot.send_message(ADMIN_ID, "Бот запущен\n")
+    await bot.send_message(ADMIN_ID, "Бот запущен")
 
 
 if __name__ == '__main__':
