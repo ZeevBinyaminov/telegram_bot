@@ -1,12 +1,3 @@
 {
-    "/add_event": {
-        "event_name": "/add_event",
-        "event_text": "Квиз",
-        "event_time": "/add_event"
-    },
-    "23.03.23": {
-        "event_name": "квиз",
-        "event_text": "квиз для мирэка",
-        "event_time": "18:00"
-    }
+
 }

@@ -1,13 +1,15 @@
 import json
 import logging
-# import datetime
+from datetime import datetime
+
+import schedule
 from config import ADMIN_ID
 
-from loader import dp
+from loader import dp, bot
 from aiogram.types import Message, CallbackQuery
 
-from keyboards.inline.choice_buttons import main_menu, social_media_menu, subjects_menu
-from keyboards.inline.callback_data import subject_choice_callback, social_media_choice_callback
+from keyboards.inline.choice_buttons import main_menu, social_media_menu, subjects_menu, events_menu
+from keyboards.inline.callback_data import subject_choice_callback, social_media_choice_callback, event_choice_callback
 
 from aiogram.dispatcher import FSMContext
 from state import Subject, Event
@@ -73,6 +75,14 @@ async def choose_subjects(call: CallbackQuery):
 @dp.message_handler(commands=['subjects'])
 async def get_subjects(message: Message):
     await message.answer(text='Предметы: ', reply_markup=subjects_menu)
+
+
+@dp.callback_query_handler(text="events")
+async def choose_events(call: CallbackQuery):
+    await call.answer(cache_time=2)
+    callback_data = call.data
+    logging.info(f"call = {callback_data}")
+    await call.message.answer(text='Список ближайщих событий', reply_markup=events_menu)
 
 
 @dp.callback_query_handler(text='back')
@@ -192,7 +202,7 @@ async def add_event_text(message: Message, state: FSMContext):
 
     await Event.next()
     await message.answer(
-        "Теперь введи дату события. Формат: \"dd.mm.yy\""
+        "Теперь введи дату события. Формат: \"dd.mm.yyyy\""
     )
 
 
@@ -224,9 +234,18 @@ async def add_event_time(message: Message, state: FSMContext):
 async def add_event_json(state: FSMContext):
     async with state.proxy() as data:
         keys = list(data.keys())
-        # dt = datetime.datetime.strptime(data[keys[2]] + ' ' + data[keys[3]], "%d.%m.%y %H:%M")
-        # events_dict[dt.isocalendar()] = {keys[i]: data[keys[i]] for i in (0, 1)}
         events_dict[data[keys[2]]] = {keys[i]: data[keys[i]] for i in (0, 1, 3)}
 
     with open("events.json", "w") as events_file:
         json.dump(events_dict, events_file, indent=4, ensure_ascii=False)
+
+
+async def notifier():
+    while True:
+        date, time = datetime.now().strftime("%d.%m.%Y %H:%M").split()
+        if events_dict.get(date):
+            if time == events_dict.get(date).get('event_time'):
+                await bot.send_message(chat_id=ADMIN_ID,
+                                       text=events_dict.get(date).get('event_text'))
+                del events_dict[date]
+

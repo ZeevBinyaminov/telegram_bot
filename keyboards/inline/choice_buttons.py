@@ -1,6 +1,8 @@
+from datetime import datetime
+
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from keyboards.inline.callback_data import subject_choice_callback, social_media_choice_callback
-from db import subjects_dict
+from keyboards.inline.callback_data import subject_choice_callback, social_media_choice_callback, event_choice_callback
+from db import subjects_dict, events_dict
 
 # start menu
 main_menu = InlineKeyboardMarkup(row_width=2)
@@ -8,9 +10,11 @@ social_media_button = InlineKeyboardButton(text="Социальные сети",
                                            callback_data="social media")
 subject_button = InlineKeyboardButton(text='Предметы',
                                       callback_data="subjects")
+events_button = InlineKeyboardButton(text='События', callback_data="events")
+
 main_menu.insert(social_media_button)
 main_menu.insert(subject_button)
-
+main_menu.insert(events_button)
 # back to previous step
 back_button = InlineKeyboardButton(text="Назад", callback_data="back")
 
@@ -37,4 +41,15 @@ for subject in subjects_dict:
     subjects_menu.insert(choose_subject)
 subjects_menu.insert(back_button)
 
-
+# events
+events_menu = InlineKeyboardMarkup(row_width=1)
+sorted_dates = sorted(events_dict, key=lambda date: datetime.strptime(date, '%d.%m.%Y'))
+for event_date in sorted_dates:
+    choose_event = InlineKeyboardButton(
+        text=f"{events_dict[event_date]['event_name']}: {event_date}- {events_dict[event_date]['event_time']}",
+        callback_data=event_choice_callback.new(
+                event_name=events_dict[event_date]['event_name'],
+            )
+    )
+    events_menu.insert(choose_event)
+events_menu.insert(back_button)
