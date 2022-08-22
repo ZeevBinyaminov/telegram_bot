@@ -19,5 +19,6 @@ if __name__ == '__main__':
         dp,
         on_startup=on_startup,
         on_shutdown=on_shutdown,
+        loop=loop
     )
-    loop.create_task(notifier())
+

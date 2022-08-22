@@ -1,3 +1,4 @@
+import asyncio
 import json
 import logging
 from datetime import datetime
@@ -81,7 +82,10 @@ async def choose_events(call: CallbackQuery):
     await call.answer(cache_time=1)
     callback_data = call.data
     logging.info(f"call = {callback_data}")
-    await call.message.answer(text='Список ближайщих событий', reply_markup=events_menu)
+    if events_dict:
+        await call.message.answer(text='Список ближайщих событий', reply_markup=events_menu)
+    else:
+        await call.message.answer(text="На ближайщее вреня нет событий")
 
 
 @dp.message_handler(commands=['events'])
@@ -255,4 +259,11 @@ async def notifier():
             if time == events_dict.get(date).get('event_time'):
                 await bot.send_message(chat_id=ADMIN_ID,
                                        text=events_dict.get(date).get('event_text'))
-                del events_dict[date]
+
+                # очистка от событий
+                del events_dict[date][time]
+                if events_dict[date] is None:
+                    del events_dict[date]
+
+                with open("events.json", "w") as events_file:
+                    json.dump(events_dict, events_file, indent=4, ensure_ascii=False)
