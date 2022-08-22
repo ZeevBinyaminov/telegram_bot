@@ -10,17 +10,5 @@
         "instagram_link": "",
         "chat_link": "",
         "zoom_link": ""
-    },
-    "checker": {
-        "youtube_link": "youtube.com",
-        "instagram_link": "instagram.com",
-        "chat_link": "vk.com/optimum_iq",
-        "zoom_link": "zoom.com"
-    },
-    "new subject": {
-        "youtube_link": "yout",
-        "instagram_link": "inst",
-        "chat_link": "chat",
-        "zoom_link": "zoom"
     }
 }
