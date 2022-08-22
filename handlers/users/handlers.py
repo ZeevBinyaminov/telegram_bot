@@ -2,15 +2,13 @@ import asyncio
 import json
 import logging
 from datetime import datetime
-
 from config import ADMIN_ID
 
 from loader import dp, bot
 from aiogram.types import Message, CallbackQuery
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from keyboards.inline.choice_buttons import main_menu, social_media_menu, subjects_menu, events_menu, \
-    update_events_menu, update_subjects_menu, back_button
+    make_events_menu, make_subjects_menu
 from keyboards.inline.callback_data import subject_choice_callback, social_media_choice_callback, event_choice_callback
 
 from aiogram.dispatcher import FSMContext
@@ -126,6 +124,7 @@ async def choose_social_media(call: CallbackQuery, callback_data: dict):
     )
 
 
+# adding new subject
 @dp.message_handler(commands=["add_subject"], user_id=ADMIN_ID, state=None)
 async def add_subject(message: Message):
     await Subject.subject_name.set()
@@ -190,10 +189,11 @@ async def add_subject_json(state: FSMContext):
 
     with open("subjects.json", "w") as subjects_file:
         json.dump(subjects_dict, subjects_file, indent=4, ensure_ascii=False)
-    update_subjects_menu()
+    global subjects_menu
+    subjects_menu = make_subjects_menu()
+# ---
 
-
-# рассылка с выбором даты и времени
+# adding new event
 @dp.message_handler(user_id=ADMIN_ID, commands=['add_event'], state=None)
 async def set_event(message: Message):
     await Event.event_name.set()
@@ -246,6 +246,7 @@ async def add_event_time(message: Message, state: FSMContext):
 
 
 async def add_event_json(state: FSMContext):
+    global events_menu
     async with state.proxy() as data:
         keys = list(data.keys())
         date = data[keys[2]]
@@ -257,24 +258,13 @@ async def add_event_json(state: FSMContext):
     with open("events.json", "w") as events_file:
         json.dump(events_dict, events_file, indent=4, ensure_ascii=False)
 
-    # update menu function global events_menu - keep
-    global events_menu
-    events_menu = InlineKeyboardMarkup(row_width=1)
-    sorted_dates = sorted(events_dict, key=lambda date: datetime.strptime(date, '%d.%m.%Y'))
-    for event_date in sorted_dates:
-        sorted_time = sorted(events_dict[event_date], key=lambda date: datetime.strptime(date, '%H:%M'))
-        for event_time in sorted_time:
-            choose_event = InlineKeyboardButton(
-                text=f"{events_dict[event_date][event_time]['event_name']}: {event_date} - {event_time}",
-                callback_data=event_choice_callback.new(
-                    event_name=events_dict[event_date][event_time]['event_name'],
-                )
-            )
-            events_menu.insert(choose_event)
-    events_menu.insert(back_button)
+    events_menu = make_events_menu()
+# ---
 
 
+# notifier
 async def notifier():
+    global events_menu
     while True:
         date, time = datetime.now().strftime("%d.%m.%Y %H:%M").split()
         if events_dict.get(date):
@@ -284,8 +274,9 @@ async def notifier():
 
                 # очистка от событий
                 del events_dict[date][time]
-                if events_dict[date] is None:
+                if events_dict[date] == {}:
                     del events_dict[date]
 
                 with open("events.json", "w") as events_file:
                     json.dump(events_dict, events_file, indent=4, ensure_ascii=False)
+                events_menu = make_events_menu()

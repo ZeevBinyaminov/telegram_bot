@@ -23,10 +23,28 @@
         "chat_link": "питон",
         "zoom_link": "питон"
     },
-    "chill": {
-        "youtube_link": "chill",
-        "instagram_link": "cj",
-        "chat_link": "jd",
-        "zoom_link": "/subjects"
+    "Микра": {
+        "youtube_link": "ла",
+        "instagram_link": "ао",
+        "chat_link": "ал",
+        "zoom_link": "ал"
+    },
+    "check": {
+        "youtube_link": "lsls",
+        "instagram_link": "sksk",
+        "chat_link": "sksk",
+        "zoom_link": "sks"
+    },
+    "11111": {
+        "youtube_link": "lsls",
+        "instagram_link": "slsls",
+        "chat_link": "lsls",
+        "zoom_link": "ksk"
+    },
+    "22222": {
+        "youtube_link": "ss",
+        "instagram_link": "s",
+        "chat_link": "s",
+        "zoom_link": "s"
     }
 }

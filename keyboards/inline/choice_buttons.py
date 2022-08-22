@@ -32,39 +32,27 @@ social_media_menu.add(vk, telegram, instagram)
 social_media_menu.insert(back_button)
 
 # subjects
-subjects_menu = InlineKeyboardMarkup(row_width=3)
 
-
-#
-# for subject in subjects_dict:
-#     choose_subject = InlineKeyboardButton(text=subject,
-#                                           callback_data=subject_choice_callback.new(
-#                                               subject_name=subject,
-#                                           ))
-#     subjects_menu.insert(choose_subject)
-# subjects_menu.insert(back_button)
-def update_subjects_menu():
-    global subjects_menu, subjects_dict
-    subjects_menu = InlineKeyboardMarkup(row_width=3)
+def make_subjects_menu():
+    menu = InlineKeyboardMarkup(row_width=3)
     for subject in subjects_dict:
         choose_subject = InlineKeyboardButton(text=subject,
                                               callback_data=subject_choice_callback.new(
                                                   subject_name=subject,
                                               ))
-        subjects_menu.insert(choose_subject)
-    subjects_menu.insert(back_button)
+        menu.insert(choose_subject)
+    menu.insert(back_button)
+    return menu
 
 
-update_subjects_menu()
+subjects_menu = make_subjects_menu()
+
+
 
 # events
-events_menu = InlineKeyboardMarkup(row_width=1)
 
-
-def update_events_menu():
-    from db import events_dict
-    global events_menu
-    events_menu = InlineKeyboardMarkup(row_width=1)
+def make_events_menu():
+    menu = InlineKeyboardMarkup(row_width=1)
     sorted_dates = sorted(events_dict, key=lambda date: datetime.strptime(date, '%d.%m.%Y'))
     for event_date in sorted_dates:
         sorted_time = sorted(events_dict[event_date], key=lambda date: datetime.strptime(date, '%H:%M'))
@@ -75,8 +63,11 @@ def update_events_menu():
                     event_name=events_dict[event_date][event_time]['event_name'],
                 )
             )
-            events_menu.insert(choose_event)
-    events_menu.insert(back_button)
+            menu.insert(choose_event)
+    menu.insert(back_button)
+    return menu
 
 
-update_events_menu()
+events_menu = make_events_menu()
+
+
