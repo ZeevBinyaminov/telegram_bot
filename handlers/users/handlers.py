@@ -268,15 +268,15 @@ async def notifier():
     while True:
         date, time = datetime.now().strftime("%d.%m.%Y %H:%M").split()
         if events_dict.get(date):
-            if time == events_dict.get(date).get('event_time'):
-                await bot.send_message(chat_id=ADMIN_ID,
-                                       text=events_dict.get(date).get('event_text'))
+            for event_time in events_dict.get(date):
+                if time == event_time:
+                    await bot.send_message(chat_id=ADMIN_ID,
+                                           text=events_dict.get(date).get(event_time).get('event_text'))
+                    # очистка от событий
+                    del events_dict[date][time]
+                    if events_dict[date] == {}:
+                        del events_dict[date]
 
-                # очистка от событий
-                del events_dict[date][time]
-                if events_dict[date] == {}:
-                    del events_dict[date]
-
-                with open("events.json", "w") as events_file:
-                    json.dump(events_dict, events_file, indent=4, ensure_ascii=False)
-                events_menu = make_events_menu()
+                    with open("events.json", "w") as events_file:
+                        json.dump(events_dict, events_file, indent=4, ensure_ascii=False)
+                    events_menu = make_events_menu()
