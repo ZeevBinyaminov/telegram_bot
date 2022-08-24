@@ -5,7 +5,7 @@ from datetime import datetime
 from config import ADMIN_ID
 
 from loader import dp, bot
-from aiogram.types import Message, CallbackQuery
+from aiogram.types import Message, CallbackQuery, InlineKeyboardMarkup
 
 from keyboards.inline.choice_buttons import main_menu, social_media_menu, subjects_menu, events_menu, \
     make_events_menu, make_subjects_menu
@@ -82,19 +82,18 @@ async def choose_events(call: CallbackQuery):
     await call.answer(cache_time=1)
     callback_data = call.data
     logging.info(f"call = {callback_data}")
-    if events_dict:
-        await call.message.answer(text='Список ближайших событий', reply_markup=events_menu)
-    else:
+    if events_menu == InlineKeyboardMarkup():
         await call.message.answer(text="На ближайшее вреня нет событий")
+    else:
+        await call.message.answer(text='Список ближайших событий', reply_markup=events_menu)
 
 
 @dp.message_handler(commands=['events'])
 async def get_events(message: Message):
-    if events_dict:
-        await message.answer(text='Список ближайших событий', reply_markup=events_menu)
-    else:
+    if events_menu == InlineKeyboardMarkup():
         await message.answer(text="На ближайшее вреня нет событий")
-
+    else:
+        await message.answer(text='Список ближайших событий', reply_markup=events_menu)
 
 @dp.callback_query_handler(text='back')
 async def back(call: CallbackQuery):
@@ -109,7 +108,9 @@ async def choose_subject(call: CallbackQuery, callback_data: dict):
     await call.answer(cache_time=1)
     logging.info(f"call = {callback_data}")
     subject = callback_data.get('subject_name')
-    await call.message.answer(text=subjects_dict[subject])
+    await call.message.answer(
+        text='\n'.join([key + ": " + value for key, value in subjects_dict[subject].items()])
+    )
 
 
 @dp.callback_query_handler(social_media_choice_callback.filter())
@@ -254,7 +255,7 @@ async def add_event_json(state: FSMContext):
         if date not in events_dict:
             events_dict[date] = {}
         events_dict[date][time] = {keys[i]: data[keys[i]] for i in (0, 1)}
-
+        events_dict[date][time]['active'] = True
     with open("events.json", "w") as events_file:
         json.dump(events_dict, events_file, indent=4, ensure_ascii=False)
 
@@ -269,13 +270,15 @@ async def notifier():
         date, time = datetime.now().strftime("%d.%m.%Y %H:%M").split()
         if events_dict.get(date):
             for event_time in events_dict.get(date):
-                if time == event_time:
+                if time == event_time and events_dict[date][time]['active']:
                     await bot.send_message(chat_id=ADMIN_ID,
                                            text=events_dict.get(date).get(event_time).get('event_text'))
+
+                    events_dict[date][time]['active'] = False
                     # очистка от событий
-                    del events_dict[date][time]
-                    if events_dict[date] == {}:
-                        del events_dict[date]
+                    # del events_dict[date][time]
+                    # if events_dict[date] == {}:
+                    #     del events_dict[date]
 
                     with open("events.json", "w") as events_file:
                         json.dump(events_dict, events_file, indent=4, ensure_ascii=False)
