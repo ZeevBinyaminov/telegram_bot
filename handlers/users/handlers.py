@@ -21,9 +21,15 @@ from db import subjects_dict, social_media_dict, events_dict
 async def welcome(message: Message):
     command = message.get_command()
     command_text = {
-        '/start': "Привет!\n"
-                  "Я - бот-навигатор, помогаю найти необходимые ссылки и чаты.\n"
-                  "Что тебя интересует ?",
+        '/start': """Привет!
+Я - бот-навигатор по Оптимуму.
+
+🤓У нас проходят занятия по основным предметам (нажимай «предметы» и сможешь найти ссылки на записи занятий и на образовательные видео).
+
+🚀Ещё мы проводим разные мероприятия, чтобы узнать про ближайшее, нажимай «события».
+
+Также здесь вы можете найти ссылки на наши социальные сети, чтобы оставаться на связи и читать наши полезные посты на любимой платформе💜""",
+
         '/menu': 'Что тебя интересует ?',
 
     }
@@ -94,6 +100,7 @@ async def get_events(message: Message):
         await message.answer(text="На ближайшее вреня нет событий")
     else:
         await message.answer(text='Список ближайших событий', reply_markup=events_menu)
+
 
 @dp.callback_query_handler(text='back')
 async def back(call: CallbackQuery):
@@ -192,6 +199,8 @@ async def add_subject_json(state: FSMContext):
         json.dump(subjects_dict, subjects_file, indent=4, ensure_ascii=False)
     global subjects_menu
     subjects_menu = make_subjects_menu()
+
+
 # ---
 
 # adding new event
@@ -260,6 +269,8 @@ async def add_event_json(state: FSMContext):
         json.dump(events_dict, events_file, indent=4, ensure_ascii=False)
 
     events_menu = make_events_menu()
+
+
 # ---
 
 
@@ -275,10 +286,6 @@ async def notifier():
                                            text=events_dict.get(date).get(event_time).get('event_text'))
 
                     events_dict[date][time]['active'] = False
-                    # очистка от событий
-                    # del events_dict[date][time]
-                    # if events_dict[date] == {}:
-                    #     del events_dict[date]
 
                     with open("events.json", "w") as events_file:
                         json.dump(events_dict, events_file, indent=4, ensure_ascii=False)
