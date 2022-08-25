@@ -10,5 +10,11 @@
         "instagram_link": "",
         "chat_link": "",
         "zoom_link": ""
+    },
+    "Тервер": {
+        "youtube_link": "т",
+        "instagram_link": ".",
+        "chat_link": ".",
+        "zoom_link": "/subjects"
     }
 }

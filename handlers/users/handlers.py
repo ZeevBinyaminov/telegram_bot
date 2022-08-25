@@ -62,7 +62,8 @@ async def choose_social_media(call: CallbackQuery):
     await call.answer(cache_time=1)
     callback_data = call.data
     logging.info(f"call = {callback_data}")
-    await call.message.answer(text='Наши соцсети:', reply_markup=social_media_menu)
+    await call.message.edit_text(text='Наши соцсети:')
+    await call.message.edit_reply_markup(reply_markup=social_media_menu)
 
 
 @dp.message_handler(commands=['social_media'])
@@ -72,10 +73,12 @@ async def get_social_media(message: Message):
 
 @dp.callback_query_handler(text='subjects')
 async def choose_subjects(call: CallbackQuery):
-    await call.answer(cache_time=1)
+    await call.answer(cache_time=2)
     callback_data = call.data
     logging.info(f"call = {callback_data}")
-    await call.message.answer(text='Выбери предмет:', reply_markup=subjects_menu)
+    await call.message.edit_text(text='Выбери предмет:')
+    await call.message.edit_reply_markup(reply_markup=subjects_menu)
+
 
 
 @dp.message_handler(commands=['subjects'])
@@ -89,9 +92,11 @@ async def choose_events(call: CallbackQuery):
     callback_data = call.data
     logging.info(f"call = {callback_data}")
     if events_menu == InlineKeyboardMarkup():
-        await call.message.answer(text="На ближайшее вреня нет событий")
+        await call.message.edit_text(text="На ближайшее вреня нет событий")
+        await call.message.edit_reply_markup()
     else:
-        await call.message.answer(text='Список ближайших событий', reply_markup=events_menu)
+        await call.message.edit_text(text="Список ближайших событий")
+        await call.message.edit_reply_markup(reply_markup=events_menu)
 
 
 @dp.message_handler(commands=['events'])
@@ -107,7 +112,8 @@ async def back(call: CallbackQuery):
     await call.answer(cache_time=1)
     callback_data = call.data
     logging.info(f"call = {callback_data}")
-    await call.message.answer(text='Что тебя интересует ?', reply_markup=main_menu)
+    await call.message.edit_text(text='Что тебя интересует ?')
+    await call.message.edit_reply_markup(reply_markup=main_menu)
 
 
 @dp.callback_query_handler(subject_choice_callback.filter())
