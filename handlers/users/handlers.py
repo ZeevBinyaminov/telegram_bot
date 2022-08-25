@@ -122,7 +122,7 @@ async def choose_subject(call: CallbackQuery, callback_data: dict):
     logging.info(f"call = {callback_data}")
     subject = callback_data.get('subject_name')
     await call.message.answer(
-        text='\n'.join([key + ": " + value for key, value in subjects_dict[subject].items()])
+        text='\n'.join([key.rstrip("_link").title() + ": " + value for key, value in subjects_dict[subject].items()])
     )
 
 
@@ -155,16 +155,7 @@ async def add_subject_name(message: Message, state: FSMContext):
             data['subject_name'] = message.text
 
         await Subject.next()
-        await message.answer("Теперь введи ссылку на youtube-плейлист")
-
-
-@dp.message_handler(user_id=ADMIN_ID, state=Subject.youtube_link)
-async def add_youtube_link(message: Message, state: FSMContext):
-    async with state.proxy() as data:
-        data['youtube_link'] = message.text
-
-    await Subject.next()
-    await message.answer("Теперь введи ссылку на instagram-плейлист")
+        await message.answer("Теперь введи ссылку на Instagram-плейлист")
 
 
 @dp.message_handler(user_id=ADMIN_ID, state=Subject.instagram_link)
@@ -199,7 +190,7 @@ async def add_zoom_link(message: Message, state: FSMContext):
 async def add_subject_json(state: FSMContext):
     async with state.proxy() as data:
         keys = list(data.keys())
-        subjects_dict[data[keys[0]]] = {keys[i]: data[keys[i]] for i in range(1, 5)}
+        subjects_dict[data[keys[0]]] = {keys[i]: data[keys[i]] for i in range(1, 4)}
 
     with open("subjects.json", "w") as subjects_file:
         json.dump(subjects_dict, subjects_file, indent=4, ensure_ascii=False)

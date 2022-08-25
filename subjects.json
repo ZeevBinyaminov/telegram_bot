@@ -1,20 +1,22 @@
 {
     "Линал": {
-        "youtube_link": "",
         "instagram_link": "",
         "chat_link": "",
         "zoom_link": ""
     },
     "Матан": {
-        "youtube_link": "",
         "instagram_link": "",
         "chat_link": "",
         "zoom_link": ""
     },
     "Тервер": {
-        "youtube_link": "т",
-        "instagram_link": ".",
-        "chat_link": ".",
-        "zoom_link": "/subjects"
+        "instagram_link": "link",
+        "chat_link": "link",
+        "zoom_link": "link"
+    },
+    "as": {
+        "instagram_link": "as",
+        "chat_link": "as",
+        "zoom_link": "as"
     }
 }
