@@ -13,10 +13,5 @@
         "instagram_link": "link",
         "chat_link": "link",
         "zoom_link": "link"
-    },
-    "as": {
-        "instagram_link": "as",
-        "chat_link": "as",
-        "zoom_link": "as"
     }
 }
