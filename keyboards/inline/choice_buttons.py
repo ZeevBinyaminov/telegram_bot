@@ -63,7 +63,9 @@ def make_events_menu():
                 choose_event = InlineKeyboardButton(
                     text=f"{events_dict[event_date][event_time]['event_name']}: {event_date} - {event_time}",
                     callback_data=event_choice_callback.new(
-                        event_name=events_dict[event_date][event_time]['event_name'],
+                        event_Name=events_dict[event_date][event_time]['event_name'],
+                        event_Date=event_date,
+                        event_Time=event_time
                     )
                 )
                 menu.insert(choose_event)

@@ -17,7 +17,6 @@ from state import Subject, Event
 from db import subjects_dict, social_media_dict, events_dict
 
 
-
 @dp.message_handler(commands=["start", "menu"])
 async def welcome(message: Message):
     command = message.get_command()
@@ -37,15 +36,13 @@ async def welcome(message: Message):
     # ---- Добавление нового пользователя в словарь и учет кликов
     with open("users.json", "r") as users_file:
         users_dict = json.load(users_file)
-    user_id = str(message.from_user.id)
-    username = message.from_user.username
+        user_id = str(message.from_user.id)
+        username = message.from_user.username
 
     if user_id not in users_dict:
         users_dict[user_id] = {
-            "username": username,
-            "visits": 0
+            "username": username
         }
-    users_dict[user_id]["visits"] += 1
 
     with open("users.json", "w") as users_file:
         json.dump(users_dict, users_file, indent=4, ensure_ascii=False)
@@ -55,8 +52,6 @@ async def welcome(message: Message):
         text=command_text[command],
         reply_markup=main_menu
     )
-
-
 
 
 @dp.callback_query_handler(text='social media')
@@ -137,6 +132,14 @@ async def choose_social_media(call: CallbackQuery, callback_data: dict):
         text=f"Ссылка на {social_media}: \n"
              f"{social_media_dict[social_media]['url']}"
     )
+
+
+@dp.callback_query_handler(event_choice_callback.filter())
+async def choose_event(call: CallbackQuery, callback_data: dict):
+    await call.answer(cache_time=1)
+    logging.info(f"call = {callback_data}")
+    date, time = call.data.split(";")[2:]
+    await call.message.answer(text=events_dict[date][time]["event_text"])
 
 
 # adding new subject
@@ -276,7 +279,7 @@ async def add_event_json(state: FSMContext):
 async def notifier():
     global events_menu
     while True:
-        date, time = (datetime.now() + timedelta(hours=2)).strftime("%d.%m.%Y %H:%M").split()
+        date, time = (datetime.now() + timedelta(days=1)).strftime("%d.%m.%Y %H:%M").split()
 
         if events_dict.get(date):
             for event_time in events_dict.get(date):
@@ -291,4 +294,3 @@ async def notifier():
                     events_menu = make_events_menu()
 
         await asyncio.sleep(5)
-
