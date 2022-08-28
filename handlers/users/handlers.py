@@ -17,6 +17,7 @@ from state import Subject, Event
 from db import subjects_dict, social_media_dict, events_dict
 
 
+
 @dp.message_handler(commands=["start", "menu"])
 async def welcome(message: Message):
     command = message.get_command()
@@ -54,6 +55,8 @@ async def welcome(message: Message):
         text=command_text[command],
         reply_markup=main_menu
     )
+
+
 
 
 @dp.callback_query_handler(text='social media')
@@ -278,7 +281,7 @@ async def notifier():
         if events_dict.get(date):
             for event_time in events_dict.get(date):
                 if time == event_time and events_dict[date][time]['active']:
-                    await bot.send_message(chat_id=ADMIN_ID,
+                    await bot.send_message(chat_id=OPTIMUM_CHAT_ID,
                                            text=events_dict.get(date).get(event_time).get('event_text'))
 
                     events_dict[date][time]['active'] = False
