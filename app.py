@@ -15,7 +15,7 @@ async def on_startup(dp):
 
 if __name__ == '__main__':
     from handlers import dp
-    # loop.create_task(notifier())
+    loop.create_task(notifier())
     executor.start_polling(
         dp,
         on_startup=on_startup,

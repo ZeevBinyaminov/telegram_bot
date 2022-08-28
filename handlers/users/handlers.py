@@ -1,8 +1,8 @@
 import asyncio
 import json
 import logging
-from datetime import datetime
-from config import ADMIN_ID
+from datetime import datetime, timedelta
+from config import ADMIN_ID, OPTIMUM_CHAT_ID
 
 from loader import dp, bot
 from aiogram.types import Message, CallbackQuery, InlineKeyboardMarkup
@@ -273,7 +273,8 @@ async def add_event_json(state: FSMContext):
 async def notifier():
     global events_menu
     while True:
-        date, time = datetime.now().strftime("%d.%m.%Y %H:%M").split()
+        date, time = (datetime.now() + timedelta(hours=2)).strftime("%d.%m.%Y %H:%M").split()
+
         if events_dict.get(date):
             for event_time in events_dict.get(date):
                 if time == event_time and events_dict[date][time]['active']:
@@ -285,3 +286,6 @@ async def notifier():
                     with open("events.json", "w") as events_file:
                         json.dump(events_dict, events_file, indent=4, ensure_ascii=False)
                     events_menu = make_events_menu()
+
+        await asyncio.sleep(5)
+
