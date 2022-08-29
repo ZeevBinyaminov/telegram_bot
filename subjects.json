@@ -1,27 +1,3 @@
 {
-    "Линал": {
-        "instagram_link": "",
-        "chat_link": "",
-        "zoom_link": ""
-    },
-    "Матан": {
-        "instagram_link": "",
-        "chat_link": "",
-        "zoom_link": ""
-    },
-    "Тервер": {
-        "instagram_link": "link",
-        "chat_link": "link",
-        "zoom_link": "link"
-    },
-    "Англ": {
-        "instagram_link": "инст",
-        "chat_link": "чат",
-        "zoom_link": "зум"
-    },
-    "ch": {
-        "instagram_link": "ch",
-        "chat_link": "ch",
-        "zoom_link": "ch"
-    }
+
 }
