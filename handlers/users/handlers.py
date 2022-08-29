@@ -92,7 +92,7 @@ async def choose_events(call: CallbackQuery):
     callback_data = call.data
     logging.info(f"call = {callback_data}")
     if events_menu == InlineKeyboardMarkup():
-        await call.message.edit_text(text="На ближайшее вреня нет событий.\n"
+        await call.message.edit_text(text="На ближайшее время нет событий.\n"
                                           "Нажмите на /menu, чтобы вернуться в начало")
     else:
         await call.message.edit_text(text="Список ближайших событий")
