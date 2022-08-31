@@ -123,7 +123,7 @@ async def choose_subject(call: CallbackQuery, callback_data: dict):
     logging.info(f"call = {callback_data}")
     subject = callback_data.get('subject_name')
     await call.message.answer(
-        text='\n'.join([key.rstrip("_link").title() + ": " + value for key, value in subjects_dict[subject].items()])
+        text='\n'.join([key.rstrip("_link").title() + ": " + value + "\n" for key, value in subjects_dict[subject].items()])
     )
 
 
